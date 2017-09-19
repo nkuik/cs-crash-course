@@ -4,7 +4,6 @@ import random
 import unittest
 import itertools
 
-
 # How much do I need to handle special cases?
 def robot_arm_path(points):
     shortest_distance = math.inf
