@@ -8,3 +8,9 @@
 - Combinatronics
 - Notation
 - Be Neater
+
+## Studied
+- Combinatronics
+- Some trigonometry
+- Data structures
+    * Linked Lists Some stuff on trees
