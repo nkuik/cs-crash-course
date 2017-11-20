@@ -1,0 +1,5 @@
+* Todo
+
+- [ ] load integers from txt file into arra
+- [ ] write initial merge_sort function
+- [ ] count the number of inversions
