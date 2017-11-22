@@ -13,7 +13,12 @@ def merge_sort(the_list):
         return merge(merge_sort(left), merge_sort(right))
 
 
+inversion_counter = 0
+
 def merge(left_list, right_list):
+
+    global inversion_counter
+
     if not len(left_list) or not len(right_list):
         return left_list or right_list
 
@@ -28,19 +33,31 @@ def merge(left_list, right_list):
         else:
             result.append(right_list[right_index])
             right_index += 1
+            inversion_counter += (len(left_list) - left_index)
         if left_index == len(left_list) or right_index == len(right_list):
             result.extend(left_list[left_index:] or right_list[right_index:])
     return result
 
 
+list_for_sorting = []
+with open('input.txt', 'r') as file:
+    for line in file:
+        list_for_sorting.append(line.strip())
 
-while True:
-    list_for_sorting = [randint(0, 100000) for _ in range(1,100)]
 
-    merge_sorted = merge_sort(list_for_sorting)
-    python_sorted = sorted(list_for_sorting)
+basic_list = [1,4,2,3]
 
-    if merge_sorted != python_sorted:
-        print('Shit, they\'re unequal')
-    else:
-        print('Equal!')
+the_list = merge_sort(list_for_sorting)
+
+import pdb; pdb.set_trace()
+
+# while True:
+#     list_for_sorting = [randint(0, 100000) for _ in range(1,100)]
+
+#     merge_sorted = merge_sort(list_for_sorting)
+#     python_sorted = sorted(list_for_sorting)
+
+#     if merge_sorted != python_sorted:
+#         print('Shit, they\'re unequal')
+#     else:
+#         print('Equal!')
