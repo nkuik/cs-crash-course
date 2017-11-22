@@ -1,3 +1,5 @@
+from random import randint
+
 def merge_sort(the_list):
 
         if len(the_list) < 2:
@@ -28,9 +30,17 @@ def merge(left_list, right_list):
             right_index += 1
         if left_index == len(left_list) or right_index == len(right_list):
             result.extend(left_list[left_index:] or right_list[right_index:])
-            break
     return result
 
 
 
-print(merge_sort([3, 95, 237, 2398, 982, 2350, 2816]))
+while True:
+    list_for_sorting = [randint(0, 100000) for _ in range(1,100)]
+
+    merge_sorted = merge_sort(list_for_sorting)
+    python_sorted = sorted(list_for_sorting)
+
+    if merge_sorted != python_sorted:
+        print('Shit, they\'re unequal')
+    else:
+        print('Equal!')
