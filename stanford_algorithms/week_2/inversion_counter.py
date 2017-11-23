@@ -1,42 +1,51 @@
-from random import randint
+def merge_sort(the_list, list_size):
 
-def merge_sort(the_list):
-
-        if len(the_list) < 2:
-            return the_list
-
-        middle = len(the_list)//2
-
-        left = the_list[middle:]
-        right = the_list[:middle]
-
-        return merge(merge_sort(left), merge_sort(right))
+    temp_list = [None for _ in range(0, list_size)]
+    return _merge_sort(the_list, temp_list, 0, list_size - 1)
 
 
-inversion_counter = 0
+def _merge_sort(the_list, temp_list, left_index, right_index):
+    inversion_count = 0
 
-def merge(left_list, right_list):
+    if right_index > left_index:
+        mid = (right_index + left_index) / 2
 
-    global inversion_counter
+        inversion_count = _merge_sort(the_list, temp_list, left_index, mid)
+        inversion_count += _merge_sort(the_list, temp_list, mid + 1, right_index)
+        inversion_count += merge(the_list, temp_list, left_index, mid + 1, right_index)
 
-    if not len(left_list) or not len(right_list):
-        return left_list or right_list
+    return inversion_count
 
-    result = []
-    left_index = 0
-    right_index = 0
 
-    while (len(result) < (len(left_list) + len(right_list))):
-        if left_list[left_index] < right_list[right_index]:
-            result.append(left_list[left_index])
-            left_index += 1
+def merge(the_list, temp_list, left_index, mid, right_index):
+    i = left_index
+    j = mid
+    k = left_index
+    inversion_count = 0
+
+    while (i <= mid - 1) and (j <= right_index):
+        if the_list[i] <= the_list[j]:
+            temp_list[k] = the_list[i]
+            k += 1
+            i += 1
         else:
-            result.append(right_list[right_index])
-            right_index += 1
-            inversion_counter += (len(left_list) - left_index)
-        if left_index == len(left_list) or right_index == len(right_list):
-            result.extend(left_list[left_index:] or right_list[right_index:])
-    return result
+            inversion_count += (mid - i)
+            k += 1
+            j += 1
+
+    while i <= (mid - 1):
+        temp_list[k] = the_list[i]
+        k += 1
+        i += 1
+
+    while j <= right_index:
+        temp_list[k] = the_list[j]
+        k += 1
+        j += 1
+
+    the_list = temp_list
+
+    return inversion_count
 
 
 list_for_sorting = []
@@ -44,20 +53,5 @@ with open('input.txt', 'r') as file:
     for line in file:
         list_for_sorting.append(line.strip())
 
-
-basic_list = [1,4,2,3]
-
-the_list = merge_sort(list_for_sorting)
-
-import pdb; pdb.set_trace()
-
-# while True:
-#     list_for_sorting = [randint(0, 100000) for _ in range(1,100)]
-
-#     merge_sorted = merge_sort(list_for_sorting)
-#     python_sorted = sorted(list_for_sorting)
-
-#     if merge_sorted != python_sorted:
-#         print('Shit, they\'re unequal')
-#     else:
-#         print('Equal!')
+test_list = [1, 20, 6, 4, 5]
+inversions = merge_sort(list_for_sorting, len(list_for_sorting))
