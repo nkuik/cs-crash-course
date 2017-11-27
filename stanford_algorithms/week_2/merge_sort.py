@@ -1,19 +1,20 @@
 from random import randint
 
+
+# currently recursing
 def merge_sort(the_list):
 
         if len(the_list) < 2:
-            return the_list
+            return the_list, 0
 
-        middle = len(the_list)//2
+        middle = int(len(the_list) / 2)
 
-        left = the_list[middle:]
-        right = the_list[:middle]
+        left_sorted = merge_sort(the_list[:middle])
+        right_sorted = merge_sort(the_list[middle:])
+        final_merged = merge(left_sorted, right_sorted)
 
-        return merge(merge_sort(left), merge_sort(right))
+        return final_merged
 
-
-inversion_counter = 0
 
 def merge(left_list, right_list):
 
@@ -24,7 +25,7 @@ def merge(left_list, right_list):
     left_index = 0
     right_index = 0
 
-    while (len(result) < (len(left_list) + len(right_list))):
+    while (left_index < len(left_list) and right_index < len(right_list)):
         if left_list[left_index] < right_list[right_index]:
             result.append(left_list[left_index])
             left_index += 1
@@ -44,16 +45,5 @@ with open('input.txt', 'r') as file:
 
 basic_list = [1,4,2,3]
 
-the_list = merge_sort(list_for_sorting)
+print(merge_sort(basic_list))
 
-
-# while True:
-#     list_for_sorting = [randint(0, 100000) for _ in range(1,100)]
-
-#     merge_sorted = merge_sort(list_for_sorting)
-#     python_sorted = sorted(list_for_sorting)
-
-#     if merge_sorted != python_sorted:
-#         print('Shit, they\'re unequal')
-#     else:
-#         print('Equal!')
