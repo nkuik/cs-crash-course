@@ -1,21 +1,24 @@
 from random import randrange, randint
 import click
+import copy
 
 
-def _quick_sort(lst, start, end, pivot_type):
+SORT_TYPE = None
+
+def _quick_sort(lst, start, end):
     comparisons = 0
     if start <= end:
-        if pivot_type == 'start':
+        if SORT_TYPE == 'start':
             pivot = start
-        if pivot_type == 'end':
+        if SORT_TYPE == 'end':
             pivot = end
-        if pivot_type == 'median':
+        if SORT_TYPE == 'median':
             pivot = median(lst, start, end, (start + end) // 2)
         new_pivot, comparisons = partition(lst, start, end, pivot)
         comparisons += _quick_sort(
-            lst, start, new_pivot - 1, pivot_type)
+            lst, start, new_pivot - 1)
         comparisons += _quick_sort(
-            lst, new_pivot + 1, end, pivot_type)
+            lst, new_pivot + 1, end)
     return comparisons
 
 
@@ -41,16 +44,23 @@ def median(lst, start, end, mean):
 @click.command()
 @click.argument('provided_list', type=click.File('r'))
 def quick_sort(provided_list):
+    global SORT_TYPE
     list_for_sorting = []
     for line in provided_list:
         list_for_sorting.append(line.strip())
+    SORT_TYPE = 'start'
+    start_list = copy.deepcopy(list_for_sorting)
     start = _quick_sort(
-        list_for_sorting, 0, len(list_for_sorting) - 1, 'start')
-    # print(_quick_sort(
-    #     list_for_sorting, 0, len(list_for_sorting) - 1, 'end'))
+        start_list, 0, len(list_for_sorting) - 1)
+    SORT_TYPE = 'end'
+    end_list = copy.deepcopy(list_for_sorting)
+    end = (_quick_sort(
+        end_list, 0, len(list_for_sorting) - 1))
+    SORT_TYPE = 'median'
+    median_list = copy.deepcopy(list_for_sorting)
     median = (_quick_sort(
-        list_for_sorting, 0, len(list_for_sorting) - 1, 'median'))
-    print(f'Start: {start}, Median: {median}')
+        median_list, 0, len(list_for_sorting) - 1))
+    print(f'Start: {start}, End: {end}, Median: {median}')
 
 
 if __name__ == '__main__':
